@@ -1,0 +1,138 @@
+@import 'header.css';
+@import 'clients.css';
+@import 'circle-anim.css';
+@import 'modal.css';
+
+@font-face {
+  font-family: "OpenSans";
+  src: url('../fonts/OpenSansBold.woff2') format('woff2'),
+    url('../fonts/OpenSansBold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url('../fonts/OpenSansSemiBold.woff2') format('woff2'),
+    url('../fonts/OpenSansSemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url('../fonts/OpenSansRegular.woff2') format('woff2'),
+    url('../fonts/OpenSansRegular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --violet: #9873FF;
+  --white: #FFFFFF;
+  --grey: #B0B0B0;
+  --ligth-grey: rgba(200, 197, 209, .5);
+  --bg: #F5F5F5;
+  --black: #333;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: "OpenSans", sans-serif;
+  font-weight: 400;
+  min-width: 320px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.visually-hidden {
+  display: flex;
+  position: fixed;
+  transform: scale(0);
+}
+
+.btn-reset {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.grey-text {
+  font-size: 12px;
+  color: var(--grey);
+}
+
+.black-text {
+  font-size: 14px;
+  color: var(--black);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+}
+
+.show-btn {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  border: 2px solid var(--violet);
+  border-radius: 50px;
+}
+
+.no-clients {
+  display: flex;
+  max-width: 100%;
+  justify-content: center;
+  margin-bottom: 0;
+  padding: 20px 0;
+  opacity: 0.7;
+}
+
+#app {
+  height: 100vh;
+  background-color: var(--bg);
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  height: 90px;
+  background: var(--white);
+  box-shadow: 0px 9.03012px 27.0904px rgba(176, 190, 197, 0.32), 0px 3.38629px 5.64383px rgba(176, 190, 197, 0.32);
+}
+
+.btn {
+  padding: 0;
+}
+
+.container {
+  max-width: 1008px;
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 752px;
+  }
+
+  .btn-modal {
+    margin-bottom: 5px;
+  }
+
+  .clients__list {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .clients__item-move {
+    display: flex;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,331 @@
+.modal-overlay {
+  display: grid;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .3);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .4s, visibility .4s;
+  overflow: auto;
+}
+
+.modal-overlay--visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal {
+  display: none;
+  position: relative;
+  padding: 25px 30px;
+  width: 450px;
+  height: max-content;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.15);
+  transform: scale(0);
+  transition: transform .8s;
+}
+
+.modal--visible {
+  display: block;
+}
+
+/*когда будет действовать класс .modal.open свойства применяться к классу .modal*/
+.modal-overlay--visible .modal {
+  transform: scale(1);
+}
+
+.modal__wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal__title {
+  margin-right: 9px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #333333;
+}
+
+.modal__title-delete {
+  margin-right: 9px;
+  margin-bottom: 11px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #333333;
+}
+
+.modal__id {
+  font-size: 12px;
+  line-height: 16px;
+  color: #B0B0B0;
+}
+
+.modal__close-btn {
+  position: absolute;
+  cursor: pointer;
+  right: 23px;
+  top: 23px;
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-dscr {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.inp-title {
+  display: inline-block;
+  font-size: 10px;
+  line-height: 14px;
+  color: #B0B0B0;
+}
+
+.input {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #C8C5D1;
+}
+
+.input:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.modal__contact {
+  margin-bottom: 25px;
+  padding: 25px 0;
+  background-color: rgba(200, 197, 209, .2);
+}
+
+.modal__contact-descr {
+  display: none;
+  margin-bottom: 25px;
+  transition: opacity .4s;
+}
+
+.modal__contact-descr.open {
+  display: flex;
+}
+
+.modal__contact-inp {
+  width: 240px;
+  height: 36px;
+  border: 1px solid #C8C5D1;
+  border-right: 0;
+  background-color: transparent;
+}
+
+.modal__close-descr {
+  margin: 0 auto;
+  margin-bottom: 25px;
+  max-width: 275px;
+  text-align: center;
+  font-size: 14px;
+  color: #333333;
+}
+
+.error-block-new,
+.error-block-change {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.error-field {
+  font-size: 10px;
+  color: red;
+}
+
+.choices {
+  margin: 0;
+  max-width: 123px;
+  width: 100%;
+  height: 36px;
+}
+
+.choices__inner {
+  background-color: #E7E5EB;
+  padding: 6px 10px;
+  padding-bottom: 0;
+  border: 1px solid #C8C5D1;
+  border-right: 0;
+  border-radius: 0;
+  font-size: 12px;
+  max-width: 123px;
+  width: 100%;
+  min-height: 36px;
+  overflow: hidden;
+}
+
+.choices[data-type*=select-one] .choices__inner {
+  padding-bottom: 0;
+}
+
+
+.is-focused .choices__inner,
+.is-open .choices__inner {
+  border-radius: 0;
+}
+
+.choices[data-type*=select-one]::after {
+  height: 8px;
+  width: 8px;
+  z-index: 3;
+  top: 40%;
+  border: 1px solid #9873FF;
+  border-width: 0 0 1px 1px;
+  transform: rotate(-45deg);
+}
+
+.choices[data-type*=select-one].is-open::after {
+  top: 60%;
+  border: 1px solid #9873FF;
+  border-width: 1px 1px 0 0;
+}
+
+.choices__list--single .choices__item {
+  font-size: 12px;
+  line-height: 16px;
+  color: #333333;
+}
+
+.choices__list--dropdown .choices__item--selectable {
+  padding-right: 10px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #333333;
+}
+
+.choices__list--dropdown.is-active {
+  border-radius: 0;
+}
+
+
+.modal__close-contact-btn {
+  width: 27px;
+  background: #E7E5EB;
+  border: 1px solid #C8C5D1;
+  transition: border-color 0.3s;
+}
+
+.modal__close-contact-btn svg path {
+  transition: fill 0.3s;
+}
+
+.modal__close-contact-btn:hover {
+  border-color: #F06A4D;
+}
+
+.modal__close-contact-btn:hover svg path {
+  fill: #F06A4D;
+} 
+
+.modal__add-contact-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.modal__add-contact-btn {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  transition: color 0.3s;
+}
+
+.modal__add-contact-btn:hover {
+  color:#9873FF;
+}
+
+.modal__save-contact-btn,
+.delete-btn {
+  display: flex;
+  margin: auto;
+  margin-bottom: 5px;
+  padding: 13px 35px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  background-color: #9873FF;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.modal__cancel-client-btn,
+.modal__delete-contact-btn {
+  text-decoration: underline;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+/*Стилизация placeholder*/
+::-webkit-input-placeholder {
+  font-size: 14px;
+  line-height: 19px;
+  color: #B0B0B0;
+}
+
+::-moz-placeholder {
+  font-size: 14px;
+  line-height: 19px;
+  color: #B0B0B0;
+}
+
+/* Firefox 19+ */
+:-moz-placeholder {
+  font-size: 14px;
+  line-height: 19px;
+  color: #B0B0B0;
+}
+
+/* Firefox 18- */
+:-ms-input-placeholder {
+  font-size: 14px;
+  line-height: 19px;
+  color: #B0B0B0;
+}
+
+@media (max-width: 640px) {
+  .modal {
+    width: 280px;
+    padding: 24px 15px;
+  }
+
+  .modal__contact-descr {
+    justify-content: center;
+  }
+
+  .modal__contact-inp {
+    width: 131px;
+    font-size: 14px;
+  }
+
+  .modal__close-btn {
+    right: 3px;
+    top: 3px;
+  }
+}
