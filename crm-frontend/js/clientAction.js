@@ -5,6 +5,7 @@ export const clientsAdd = (obj) => {
   const clientsList = createElement('tr', {
     className: 'clients__list'
   });
+  clientsList.dataset.id = obj.id;
 
   // ID
   const clientsId = createElement('td', {

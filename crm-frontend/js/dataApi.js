@@ -1,5 +1,6 @@
 import { changeAndDelClient } from "./btnAction.js";
 import { clientsAdd } from "./clientAction.js";
+import { createElement } from "./helper.js";
 import { clearList, clientsListClear, viewInfoClient } from "./helper.js";
 import { addSortListener, sortClietns } from "./sortClients.js";
 
@@ -16,8 +17,7 @@ export const postData = async (data) => {
       body: JSON.stringify(data)
     });
 
-    if (!response.ok) 
-    {
+    if (!response.ok) {
       const errorData = await response.json();
       return errorData.errors;
     } else {
@@ -69,8 +69,7 @@ export async function changeInfoClients(clientId, data) {
       },
     });
 
-    if (!response.ok) 
-    {
+    if (!response.ok) {
       const errorData = await response.json();
       return errorData.errors;
     } else {
@@ -159,17 +158,150 @@ export const fetchAndSortClients = async (prop) => {
   }
 }
 
-// ОТРИСОВКИ КЛИЕНТОВ ПРИ ПОИСКЕ
-export const getSearchClientsData = async () => {
+//функция отвечает за обновление и отображение списка автодополнения
+export const createAutocompleteList = async () => {
+  removeAutocompleteDropdown();
+  const inputSearch = document.querySelector('.header__search');
+  const value = inputSearch.value.toLowerCase();
+  if (value.length === 0) return;
+
   try {
-    clearList(); // 
-    const inputSearch = document.querySelector('.header__search');
-    const response = await fetch(`${url}?search=${inputSearch.value}`);
+    const response = await fetch(`${url}?search=${value}`);
     const data = await response.json();
-    clientsListClear(data);
-    changeAndDelClient();
-    return data;
+    const clientsInfo = data.map((element) => ({
+      name: element.name,
+      surname: element.surname,
+      lastName: element.lastName,
+      id: element.id
+    }));
+
+    createAutocompleteDropdown(clientsInfo);
+    // Добавляем обработчик события на элементы списка автодополнения
+    const autocompleteLinks = document.querySelectorAll('.autocomplete-link');
+
+    autocompleteLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const clientId = link.dataset.id;
+        highlightAndScrollToContact(clientId);
+      });
+    });
   } catch (error) {
     console.error(`Ошибка при загрузке клиентов: ${error}`);
   }
+};
+
+// Подсветка контакта в таблице
+const highlightAndScrollToContact = (clientId) => {
+  const contactElement = document.querySelector(`.clients__list[data-id="${clientId}"]`);
+  if (contactElement) {
+    // Удаляем подсветку у всех элементов, имеющих класс 'highlighted'
+    const highlightedContacts = document.querySelectorAll('.highlighted');
+    highlightedContacts.forEach((contact) => {
+      contact.classList.remove('highlighted');
+    });
+
+    // Добавляем подсветку к выбранному контакту
+    contactElement.classList.add('highlighted');
+
+    // Прокрутка таблицы до контакта
+    contactElement.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Прокручивает таблицу до контакта
+  }
+};
+
+//создаем список с автодополнением к поиску по ФИО
+function createAutocompleteDropdown(list) {
+  const autocompleteWrap = document.querySelector('.autocomplete-wrap');
+  const autocompleteList = createElement('ul', {
+    className: 'autocomplete-list',
+  });
+
+  let selectedElementIndex = -1; // Индекс текущего выбранного элемента
+
+  list.forEach((element, index) => {
+    const autocompleteItem = createElement('li', {
+      className: 'autocomplete-item',
+    });
+
+    const fullName = `${element.surname} ${element.name} ${element.lastName}`;
+
+    const autocompleteLink = createElement('a', {
+      className: 'autocomplete-link',
+      innerHTML: fullName,
+    });
+    autocompleteLink.setAttribute('data-id', element.id); // Устанавливаем атрибут data-id равным id элемента из списка
+
+    autocompleteItem.append(autocompleteLink);
+    autocompleteList.append(autocompleteItem);
+
+    autocompleteItem.addEventListener('mouseenter', () => {
+      selectedElementIndex = index;
+      highlightSelectedItem();
+    });
+
+    autocompleteItem.addEventListener('click', () => {
+      selectItem(element);
+    });
+  });
+
+  autocompleteWrap.append(autocompleteList);
+
+  function highlightSelectedItem() {
+    const items = autocompleteList.querySelectorAll('.autocomplete-item');
+    items.forEach((item, index) => {
+      if (index === selectedElementIndex) {
+        item.classList.add('highlighted');
+      } else {
+        item.classList.remove('highlighted');
+      }
+    });
+  }
+
+  function selectItem(selectedElement) {
+    const inputSearch = document.querySelector('.header__search');
+    inputSearch.value = `${selectedElement.surname} ${selectedElement.name} ${selectedElement.lastName}`;
+    removeAutocompleteDropdown();
+    highlightAndScrollToContact(selectedElement.id); // Выделение и прокрутка к выбранному клиенту
+  }
+
+  //управление выбором клиентов в списке автодополнения с клавиатуры
+  document.addEventListener('keydown', (event) => {
+    const items = autocompleteList.querySelectorAll('.autocomplete-item');
+
+    switch (event.key) {
+      case 'ArrowUp':
+        event.preventDefault(); // Отменяем стандартное поведение стрелок
+        selectedElementIndex = Math.max(selectedElementIndex - 1, 0);
+        highlightSelectedItem();
+        break;
+      case 'ArrowDown':
+        event.preventDefault(); // Отменяем стандартное поведение стрелок
+        selectedElementIndex = Math.min(selectedElementIndex + 1, items.length - 1);
+        highlightSelectedItem();
+        break;
+      case 'Enter':
+        if (selectedElementIndex !== -1) {
+          selectItem(list[selectedElementIndex]);
+        }
+        break;
+      default:
+        break;
+    }
+  });
+
+  // Добавляем обработчик события на клик для выбора клиента по клику мышью
+  autocompleteList.addEventListener('click', (event) => {
+    const targetItem = event.target.closest('.autocomplete-item');
+    if (targetItem) {
+      const selectedElement = list[selectedElementIndex];
+      selectItem(selectedElement);
+    }
+  });
 }
+
+
+//очищаем список с автодополнением для поиска по ФИО
+function removeAutocompleteDropdown() {
+  const listEl = document.querySelector('.autocomplete-list');
+  if (listEl) listEl.remove();
+}
+

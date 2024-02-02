@@ -1,0 +1,38 @@
+.autocomplete-wrap {
+  position: absolute;
+  display: inline-block;
+  max-width: 581px;
+  width: 100%;
+  left: 103px;
+  z-index: 2;
+}
+
+.autocomplete-item {
+  padding: 7px;
+  border: 1px solid rgba(51, 51, 51, 0.2);
+  border-top: none;
+  background-color: white;
+  font-size: 14px;
+  transition: background .3s ease-in-out;
+}
+
+.autocomplete-item:hover {
+  background-color: #ede9f8;
+}
+
+.autocomplete-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.highlighted {
+  background-color: #ede9f8;
+  transition: background-color .3s ease-in-out;
+}
+
+@media (max-width: 728px) {
+  .autocomplete-wrap {
+    display: none;
+  }
+}

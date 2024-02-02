@@ -22,7 +22,8 @@
 }
 
 .actions-spinnerEdit svg, 
-.actions-spinnerDel svg {
+.actions-spinnerDel svg,
+.actions-spinnerSave svg {
   position: absolute;
   height: 22px;
   animation: spinner .3s ease-in-out;
@@ -31,6 +32,16 @@
   animation-timing-function: linear;
   transform: translateY(36px);
 }
+
+.actions-spinnerSave {
+  display: none;
+  align-items: center;
+  margin-right: 20px;
+}
+
+/* .actions-spinnerSave svg path {
+  stroke: transparent;
+} */
 
 @keyframes circle {
   0% {

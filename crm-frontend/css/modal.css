@@ -191,7 +191,7 @@
 .choices[data-type*=select-one]::after {
   height: 8px;
   width: 8px;
-  z-index: 3;
+  z-index: 2;
   top: 40%;
   border: 1px solid #9873FF;
   border-width: 0 0 1px 1px;
@@ -208,6 +208,10 @@
   font-size: 12px;
   line-height: 16px;
   color: #333333;
+}
+
+.choices__list--dropdown {
+  z-index: 3;
 }
 
 .choices__list--dropdown .choices__item--selectable {
@@ -262,6 +266,7 @@
 .modal__save-contact-btn,
 .delete-btn {
   display: flex;
+  align-items: center;
   margin: auto;
   margin-bottom: 5px;
   padding: 13px 35px;

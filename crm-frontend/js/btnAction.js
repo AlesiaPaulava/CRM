@@ -106,50 +106,61 @@ export const changeAndDelClient = () => {
       sBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         errBlockChange.textContent = '';
+        const spinnerSave = document.querySelector('.actions-spinnerSave');
         const modal = document.querySelector('.modal-overlay');
-        if (modal.classList.contains('modal-overlay--visible')) {
-          const inpSurname = document.querySelector('.input-surname').value;
-          const inpName = document.querySelector('.input-name').value;
-          const inpLastName = document.querySelector('.input-lastname').value;
-          const formData = {
-            surname: inpSurname,
-            name: inpName,
-            lastName: inpLastName,
-            contacts: [],
-          }
 
-          const modalContact = document.querySelector('.modal__contact');
-          const contactElements = modalContact.querySelectorAll('.modal__contact-descr');
-          if (contactElements) {
-            contactElements.forEach(contactElement => {
-              const type = contactElement.querySelector('[name="type"]').value;
-              const value = contactElement.querySelector('[name="value"]').value;
-              const contact = { type, value };
-              formData.contacts.push(contact);
-            });
-          }
-
-          await changeInfoClients(clientId, formData);
-          await getClientsData();
-
-          if (formData.surname === '' || formData.name === '') {
-            const validateChangeInput = await changeInfoClients(clientId, formData);
-            validateChangeInput.forEach(inpError => {
-              console.log('inpError: ', inpError);
-              const errorField = createElement('span', {
-                className: 'error-field',
-                textContent: inpError.message,
+        try {
+          if (modal.classList.contains('modal-overlay--visible')) {
+            const inpSurname = document.querySelector('.input-surname').value;
+            const inpName = document.querySelector('.input-name').value;
+            const inpLastName = document.querySelector('.input-lastname').value;
+            const formData = {
+              surname: inpSurname,
+              name: inpName,
+              lastName: inpLastName,
+              contacts: [],
+            }
+  
+            const modalContact = document.querySelector('.modal__contact');
+            const contactElements = modalContact.querySelectorAll('.modal__contact-descr');
+            if (contactElements) {
+              contactElements.forEach(contactElement => {
+                const type = contactElement.querySelector('[name="type"]').value;
+                const value = contactElement.querySelector('[name="value"]').value;
+                const contact = { type, value };
+                formData.contacts.push(contact);
               });
-              errBlockChange.append(errorField);
-            });
+            }
+
+            spinnerSave.style.display = 'flex';
+  
+            await changeInfoClients(clientId, formData);
+            await getClientsData();
+  
+            if (formData.surname === '' || formData.name === '') {
+              const validateChangeInput = await changeInfoClients(clientId, formData);
+              validateChangeInput.forEach(inpError => {
+                console.log('inpError: ', inpError);
+                const errorField = createElement('span', {
+                  className: 'error-field',
+                  textContent: inpError.message,
+                });
+                errBlockChange.append(errorField);
+              });
+            }
+            if (modal.classList.contains('modal-overlay--visible') && formData.surname !== '' && formData.name !== '') {
+              modal.classList.remove('modal-overlay--visible');
+              const saveBtn = document.querySelector('.modal__save-contact-btn');
+              saveBtn.outerHTML = saveBtn.outerHTML;
+            } else {
+              return;
+            }
           }
-          if (modal.classList.contains('modal-overlay--visible') && formData.surname !== '' && formData.name !== '') {
-            modal.classList.remove('modal-overlay--visible');
-            const saveBtn = document.querySelector('.modal__save-contact-btn');
-            saveBtn.outerHTML = saveBtn.outerHTML;
-          } else {
-            return;
-          }
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          // Скрываем спиннер
+          spinnerSave.style.display = 'none';
         }
       });
     });

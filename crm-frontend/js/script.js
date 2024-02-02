@@ -23,7 +23,7 @@ const init = async () => {
     });
     animate.append(circleAnim);
     clientsBlock.append(animate);
-
+    
     getClientsData().then(data => { // отрисовка клиента
       animate.remove();
 

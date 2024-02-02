@@ -111,6 +111,11 @@ export const createModalChangeClients = () => {
     type: 'submit',
   });
 
+  const saveSpinner = createElement('span', {
+    className: 'actions-spinnerSave',
+    innerHTML: svgIcons.saveSpinner
+  });
+
   const deleteClient = createElement('button', {
     className: 'modal__delete-contact-btn btn-reset',
     textContent: 'Удалить клиента',
@@ -127,7 +132,7 @@ export const createModalChangeClients = () => {
     descrLastName,
     inputLastName,
   );
-
+  saveClient.prepend(saveSpinner);
   modalForm.append(wrapInput, modalContact,errValidateBlock, saveClient, deleteClient);
   modalContentTop.append(modalTitle, modalId);
   modalСhange.append(modalContentTop, btnCloseModal, modalForm);

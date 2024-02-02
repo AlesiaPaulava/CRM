@@ -24,17 +24,14 @@ export const openChangeAndDeleteModal = () => {
     button.addEventListener('click', async () => {
       const clientId = button.dataset.id;
       const parentButton = button.closest('.btn-change');
-      const textChange = button.querySelector('.black-text');
       const spinner = parentButton.querySelector('.actions-spinnerEdit');
       const btnIcon = parentButton.querySelector('.svg-change');
       // Показываем спиннер при начале загрузки данных
-      // spinner.style.visibility = 'visible';
-      // btnIcon.style.visibility = 'hidden';
       spinner.style.display = 'block';
       btnIcon.querySelector('path').setAttribute('fill', 'transparent');
 
       try {
-        // Здесь ваш код для загрузки данных клиента
+        // код для загрузки данных клиента
         const data = await getDataClient(clientId);
         const modal = createModalChangeClients(clientId);
         const modalId = document.querySelector('.modal__id');
@@ -44,8 +41,6 @@ export const openChangeAndDeleteModal = () => {
         console.error('Error loading client data:', error);
       } finally {
         // Скрываем спиннер после загрузки данных
-        // spinner.style.visibility = 'hidden';
-        // btnIcon.style.visibility = 'visible';
         spinner.style.display = 'none';
         btnIcon.querySelector('path').setAttribute('fill', '#9873FF');
       }
@@ -57,9 +52,21 @@ export const openChangeAndDeleteModal = () => {
   const buttonDelete = document.querySelectorAll('.btn-delete');
   buttonDelete.forEach(button => {
     button.addEventListener('click', () => {
-      openModal('delete');
+      const parentButton = button.closest('.btn-delete');
+      const spinnerDel = parentButton.querySelector('.actions-spinnerDel');
+      const btnIconDel = parentButton.querySelector('.svg-del');
+      spinnerDel.style.display = 'block';
+      btnIconDel.querySelector('path').setAttribute('fill', 'transparent');
+      
+      setTimeout(() => {
+        spinnerDel.style.display = 'none';
+        btnIconDel.querySelector('path').setAttribute('fill', '#F06A4D');
+
+        openModal('delete');
+      }, 1000); 
     });
-  })
+    
+  });
 }
 
 //Открытие модального окна

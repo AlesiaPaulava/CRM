@@ -1,4 +1,5 @@
 .header {
+  position: relative;
   display: flex;
   justify-content: flex-start;
 }
@@ -19,4 +20,15 @@
 
 .header__search::placeholder {
   color: var(--grey);
+}
+
+
+@media (max-width: 728px) {
+  .header {
+    justify-content: center;
+  }
+
+  .header__logo {
+    margin: 0;
+  }
 }
