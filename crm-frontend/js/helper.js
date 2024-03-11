@@ -123,18 +123,37 @@ export const mask = (select, input) => {
 export const addContactBtnShow = (addContact) => {
   const contacts = document.querySelectorAll('.modal__contact-descr');
   const closeContactsInput = document.querySelectorAll('.modal__close-contact-btn');
-  if (contacts.length >= 10) {
-    addContact.style.display = 'none';
+  addContact.style.visibility = 'visible';
+  // Проверяем, что addContact определен и не равен null или undefined
+  if (addContact) {
+    if (contacts.length >= 10) {
+      addContact.style.visibility = 'hidden';
+    }  else {
+      addContact.style.visibility = 'visible';
+    }
   }
 
   closeContactsInput.forEach(closeContact => {
     closeContact.addEventListener('click', () => {
-      if (contacts.length < 10) {
-        addContact.style.display = 'flex';
+      if (addContact && contacts.length < 10) { // Добавляем проверку на addContact
+        addContact.style.visibility = 'visible';
       }
     });
   });
 };
+
+// Удаляем все добавленные контакты и отображаем кнопку "Добавить контакт"
+export const clearAddedContacts = (addContacts) => {
+  const addedContacts = document.querySelectorAll('.modal__contact-descr');
+  addedContacts.forEach(contact => {
+    contact.remove();
+  });
+
+  addContacts.forEach(addContact => {
+    addContact.style.visibility = 'visible'; // Изменить стиль на видимый
+  });
+};
+
 
 //функция для использования иконки в зависимости от типа контакта
 export const svgIconsFormate = (contact) => {
@@ -186,4 +205,27 @@ export const svgIcons = {
   editSpiner: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><g clip-path="url(#clip0_224_6260)"><path d="M3.00008 8.03996C3.00008 10.8234 5.2566 13.08 8.04008 13.08C10.8236 13.08 13.0801 10.8234 13.0801 8.03996C13.0801 5.25648 10.8236 2.99996 8.04008 2.99996C7.38922 2.99996 6.7672 3.1233 6.196 3.348" stroke="#B89EFF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/></g><defs><clipPath id="clip0_224_6260"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>',
   deleteSpinner: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">< g clip- path="url(#clip0_224_2792)" >      <path d="M3.00008 8.04008C3.00008 10.8236 5.2566 13.0801 8.04008 13.0801C10.8236 13.0801 13.0801 10.8236 13.0801 8.04008C13.0801 5.2566 10.8236 3.00008 8.04008 3.00008C7.38922 3.00008 6.7672 3.12342 6.196 3.34812" stroke="#F06A4D" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" />  </ >  <defs>    <clipPath id="clip0_224_2792">      <rect width="16" height="16" fill="white" />    </clipPath>  </defs>  </svg >  ',
   saveSpinner: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_121_1254)"><path d="M3.00008 8.03996C3.00008 10.8234 5.2566 13.08 8.04008 13.08C10.8236 13.08 13.0801 10.8234 13.0801 8.03996C13.0801 5.25648 10.8236 2.99996 8.04008 2.99996C7.38922 2.99996 6.7672 3.1233 6.196 3.348" stroke="#B89EFF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/></g><defs><clipPath id="clip0_121_1254"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>'
+}
+
+export function handleChoicesOverflow() {
+  let choicesBlock = document.querySelectorAll('.choices');
+  if (choicesBlock.length > 5) {
+    document.querySelector('.modal__contact-wrapp').classList.add('overflow');
+    choicesBlock.forEach((e) => {
+      e.addEventListener('click', (event) => {
+        let clientY = event.pageY - document.querySelector('.modal__contact-wrapp').getBoundingClientRect().bottom;
+        
+        if (clientY > -143) {
+          if (e.classList.contains('top-choices')) {
+            e.classList.remove('top-choices');
+          }
+          e.classList.add('top-choices');
+        } else {
+          e.classList.remove('top-choices');
+        }
+      })
+    });
+  } else {
+    document.querySelector('.modal__contact-wrapp').classList.remove('overflow');
+  }
 }

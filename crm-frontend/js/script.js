@@ -62,6 +62,7 @@ const init = async () => {
   btnUpdate.addEventListener('click', async () => {
     await fetchAndSortClients('updatedAt');
   });
+  // dropdownPosition(); // Вызываем функцию для коррекции позиции выпадающего списка
 }
 init();
 

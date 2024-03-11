@@ -7,7 +7,7 @@ export const multiDefault = () => {
         searchEnabled: false,
         itemSelectText: '',
         shouldSort: false,
-        position: 'bottom'
+        
       });
       // Добавляем класс для отметки инициализации плагина
       el.classList.add('choices-initialized');

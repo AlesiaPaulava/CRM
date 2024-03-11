@@ -1,10 +1,10 @@
 import { changeInfoClients, delClientsGetData, getClientIdData, getClientsData, postData } from "./dataApi.js";
 import { createElement, mask } from "./helper.js";
-import { closeModal, openChangeAndDeleteModal } from "./modalAction.js";
+import { closeModal, openChangeAndDeleteModal, enableBodyScroll } from "./modalAction.js";
 
 export const addClientBtn = () => {
   const errBlockNew = document.querySelector('.error-block-new');
-  
+
   const submitHandler = async (event) => {
     event.preventDefault();
     errBlockNew.textContent = '';
@@ -107,6 +107,8 @@ export const changeAndDelClient = () => {
         e.preventDefault();
         errBlockChange.textContent = '';
         const spinnerSave = document.querySelector('.actions-spinnerSave');
+        spinnerSave.style.display = 'flex';
+
         const modal = document.querySelector('.modal-overlay');
 
         try {
@@ -120,7 +122,7 @@ export const changeAndDelClient = () => {
               lastName: inpLastName,
               contacts: [],
             }
-  
+
             const modalContact = document.querySelector('.modal__contact');
             const contactElements = modalContact.querySelectorAll('.modal__contact-descr');
             if (contactElements) {
@@ -132,15 +134,14 @@ export const changeAndDelClient = () => {
               });
             }
 
-            spinnerSave.style.display = 'flex';
-  
+
+
             await changeInfoClients(clientId, formData);
             await getClientsData();
-  
+
             if (formData.surname === '' || formData.name === '') {
               const validateChangeInput = await changeInfoClients(clientId, formData);
               validateChangeInput.forEach(inpError => {
-                console.log('inpError: ', inpError);
                 const errorField = createElement('span', {
                   className: 'error-field',
                   textContent: inpError.message,
@@ -152,6 +153,7 @@ export const changeAndDelClient = () => {
               modal.classList.remove('modal-overlay--visible');
               const saveBtn = document.querySelector('.modal__save-contact-btn');
               saveBtn.outerHTML = saveBtn.outerHTML;
+              enableBodyScroll(); // Вызов функции для восстановления скролла
             } else {
               return;
             }
@@ -159,6 +161,7 @@ export const changeAndDelClient = () => {
         } catch (error) {
           console.error('Error:', error);
         } finally {
+          const spinnerSave = document.querySelector('.actions-spinnerSave');
           // Скрываем спиннер
           spinnerSave.style.display = 'none';
         }

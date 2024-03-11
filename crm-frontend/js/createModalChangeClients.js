@@ -69,9 +69,9 @@ export const createModalChangeClients = () => {
   });
 
   const modalContact = createElement('div', {
-    className: 'modal__contact',
+    className: 'modal__contact contact-scroll',
   });
-
+  
   const wrapButtonAdd = createElement('div', {
     className: 'modal__add-contact-wrap',
   });
@@ -101,7 +101,7 @@ export const createModalChangeClients = () => {
       mask(newSelect.value, newInputSelect);
     });
     multiDefault(); //вызов choices(кастомного селекта)
-
+    
     addContactBtnShow(addContact);
   });
 

@@ -117,6 +117,18 @@
   background-color: rgba(200, 197, 209, .2);
 }
 
+.contact-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.modal__contact-wrapp {
+  position: relative;
+  max-height: 300px;
+  z-index: 1000;
+}
+
+
 .modal__contact-descr {
   display: none;
   margin-bottom: 25px;
@@ -175,7 +187,7 @@
   max-width: 123px;
   width: 100%;
   min-height: 36px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .choices[data-type*=select-one] .choices__inner {
@@ -210,10 +222,6 @@
   color: #333333;
 }
 
-.choices__list--dropdown {
-  z-index: 3;
-}
-
 .choices__list--dropdown .choices__item--selectable {
   padding-right: 10px;
   font-size: 12px;
@@ -221,8 +229,13 @@
   color: #333333;
 }
 
+.choices__list--dropdown {
+  position: absolute;
+  z-index: 1001;
+}
+
 .choices__list--dropdown.is-active {
-  border-radius: 0;
+  z-index: 10000;
 }
 
 
@@ -243,7 +256,7 @@
 
 .modal__close-contact-btn:hover svg path {
   fill: #F06A4D;
-} 
+}
 
 .modal__add-contact-wrap {
   display: flex;
@@ -260,7 +273,7 @@
 }
 
 .modal__add-contact-btn:hover {
-  color:#9873FF;
+  color: #9873FF;
 }
 
 .modal__save-contact-btn,

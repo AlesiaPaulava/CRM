@@ -1,6 +1,6 @@
 import { createContact } from "./createContact.js";
-import { svgIcons } from "./helper.js";
-import { addContactBtnShow, createElement, mask } from "./helper.js";
+import { handleChoicesOverflow } from "./helper.js";
+import { addContactBtnShow, createElement, mask, svgIcons } from "./helper.js";
 import Inputmask from "./lib/inputmask.es6.js";
 import { multiDefault } from "./choices.js";
 
@@ -82,6 +82,7 @@ export const createModalNewClients = () => {
     className: 'modal__add-contact-wrap',
   });
 
+
   const addContact = createElement('button', {
     className: 'modal__add-contact-btn btn-reset',
     type: 'button',
@@ -98,6 +99,7 @@ export const createModalNewClients = () => {
   wrapButtonAdd.append(addContact);
 
   addContact.addEventListener('click', () => { //при клике на кнопку создаются элементы для внесения контактов
+
     const newContact = createContact();
     newContactsWrapp.append(newContact);
     addContactBtnShow(addContact);
@@ -112,6 +114,7 @@ export const createModalNewClients = () => {
       mask(newSelect.value, newInputSelect);
     });
     multiDefault();
+    handleChoicesOverflow(); //открытия селектов вверх из-за скролла в блоке с классом modal__contact-wrapp
   });
 
   const cancelButton = createElement('button', {
