@@ -8,6 +8,8 @@ export const addClientBtn = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     errBlockNew.textContent = '';
+    errBlockNew.style.color = 'red';
+    errBlockNew.style.fontSize = '10px';
 
     //извлечение данных из формы
     const form = document.getElementById('form');
@@ -30,34 +32,37 @@ export const addClientBtn = () => {
       formData.contacts.push(contact);
     });
 
-    //Проверка наличия данных о фамилии и имени
-    if (formData.surname !== '' && formData.name !== '') {
-      //Отправка данных на сервер и обновление списка клиентов
-      await postData(formData);
-      await getClientsData();
-      form.reset();
-      // Удаление блоков с описанием контактов
-      const modalContactsDescr = document.querySelectorAll('.modal__contact-descr');
-      modalContactsDescr.forEach(contactDescr => {
-        contactDescr.remove();
-      });
-      // Закрытие модального окна
-      if (modal.classList.contains('modal-overlay--visible')) {
-        modal.classList.remove('modal-overlay--visible');
-        form.removeEventListener('click', submitHandler);
+    // Проверка наличия данных о фамилии, имени и отчестве и отсутствия цифр
+    if (formData.surname !== '' && formData.name !== '' && formData.lastName !== '') {
+      // Проверка отсутствия цифр в полях ввода фамилии, имени и отчества
+      const isValidSurname = !/\d/.test(formData.surname);
+      const isValidName = !/\d/.test(formData.name);
+      const isValidLastName = !/\d/.test(formData.lastName);
+
+      if (isValidSurname && isValidName && isValidLastName) {
+        // Если ввод допустим, отправляем данные на сервер и обновляем список клиентов
+        await postData(formData);
+        await getClientsData();
+        form.reset();
+        // Удаление блоков с описанием контактов
+        const modalContactsDescr = document.querySelectorAll('.modal__contact-descr');
+        modalContactsDescr.forEach(contactDescr => {
+          contactDescr.remove();
+        });
+        // Закрытие модального окна
+        if (modal.classList.contains('modal-overlay--visible')) {
+          modal.classList.remove('modal-overlay--visible');
+          form.removeEventListener('click', submitHandler);
+        } else {
+          return;
+        }
       } else {
-        return;
+        // Если ввод содержит цифры, выводится сообщение об ошибке
+        errBlockNew.textContent = 'Фамилия, имя и отчество не должны содержать цифры';
       }
     } else {
-      // Обработка ошибок валидации
-      const validateInput = await postData(formData);
-      validateInput.forEach(inpError => {
-        const errorField = createElement('span', {
-          className: 'error-field',
-          textContent: inpError.message,
-        });
-        errBlockNew.append(errorField);
-      });
+      // Если поля фамилии, имени или отчества пустые, выводится сообщение об ошибке
+      errBlockNew.textContent = 'Фамилия, имя и отчество обязательны для заполнения';
     }
   };
 
@@ -79,7 +84,7 @@ export const changeAndDelClient = () => {
   buttonСhange.forEach(bChange => {
     let clientId;
     bChange.addEventListener('click', async (e) => {
-      clientId = e.target.dataset.id;
+      clientId = e.currentTarget.dataset.id;
       const btnDelete = document.querySelector('.modal__delete-contact-btn');
       btnDelete.dataset.id = clientId;
 
@@ -134,8 +139,6 @@ export const changeAndDelClient = () => {
               });
             }
 
-
-
             await changeInfoClients(clientId, formData);
             await getClientsData();
 
@@ -183,7 +186,7 @@ export const changeAndDelClient = () => {
 
   buttonDelete.forEach(bDel => {
     bDel.addEventListener('click', (e) => {
-      const clientId = e.target.dataset.id;
+      const clientId = e.currentTarget.dataset.id;
       const btnDeleteCLient = document.querySelector('.delete-btn');
       btnDeleteCLient.dataset.id = clientId;
 
